@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: reset styles inside the scope */
+.tailwind-wrapper * {
+  all: revert; /* or 'unset' if you want to nuke everything */
+  font-family: inherit;
+}

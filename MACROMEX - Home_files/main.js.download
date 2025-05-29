@@ -1,0 +1,161 @@
+$(window).on("load resize scroll", function () {
+    // if ($(window).scrollTop()) {
+    //     $("html").addClass("scrolled");
+    // } else {
+    //     $("html").removeClass("scrolled");
+    // }
+});
+
+
+$(window).on("scroll", function () {
+    if ($(this).scrollTop() > $(window).height() / 5) {
+        $(".scrollTop").fadeIn();
+    } else {
+        $(".scrollTop").fadeOut();
+    }
+});
+$(document).on("click", ".scrollTop", function () {
+    $("html, body").animate({
+            scrollTop: 0,
+        },
+        700
+    );
+    return false;
+});
+
+
+$(window).on('scroll', function () {
+    // $('html').removeClass('openMenu');
+});
+
+$(document).on('click', '.toggleMenu', function () {
+    $('html').removeClass('openSearch');
+    if ($('html').hasClass('openMenu')) {
+        $('html').removeClass('openMenu');
+    } else {
+        $('html').removeClass('openSearch').addClass('openMenu');
+    }
+});
+
+$(document).on("click", ".toggleSearch, .closeSearch", function (e) {
+    e.preventDefault();
+    $('html').removeClass('openMenu');
+    if ($('html').hasClass('openSearch')) {
+        $('html').removeClass('openSearch');
+    } else {
+        $('html').addClass('openSearch');
+        $('.header .searchInput').focus();
+    }
+});
+
+$(document).on("input", ".searchInput", function () {
+    if ($(this).val().length > 2) {
+        // alert('alert1');
+        $(this).parent().siblings('.submit').find('input').removeAttr('disabled');
+    } else {
+        // alert('alert2'); 
+        $(this).parent().siblings('.submit').find('input').attr('disabled', 'disabled');
+    }
+});
+
+$(document).ready(function () {
+    console.log('ok');
+    if ($('.searchInput').val().length > 2) {
+        $('.searchInput').parent().siblings('.submit').find('input').removeAttr('disabled');
+    } else {
+        $('.searchInput').parent().siblings('.submit').find('input').attr('disabled', 'disabled');
+    }
+})
+
+$(window).on("click", function () {
+    $('html').removeClass('openSearch');
+    $('.pages-list').removeClass('active');
+});
+$(document).on('click', '.form-search-wrapper, .toggleSearch, .pages-list', function (event) {
+    event.stopPropagation();
+});
+
+// var lastScrollTop = 0;
+// $(window).on("scroll", function () {
+//     st = $(this).scrollTop();
+//     if (st < lastScrollTop) {
+//         $("html").addClass("toTop");
+//     } else {
+//         $("html").removeClass("toTop");
+//     }
+//     lastScrollTop = st;
+// });
+
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+
+$(document).on("click", "a[href='#']", function (e) {
+    e.preventDefault();
+});
+$(document).on("click", ".pages-list button", function () {
+    if ($(this).parent().hasClass('active')) {
+        $(this).parent().removeClass('active')
+    } else {
+        $(this).parent().addClass('active')
+    }
+});
+
+$(document).ready(function () {
+    var current = window.location.pathname;
+    var link;
+    $('.pages-list a, .footer a, .site-menu a').each(function () {
+        var link = $(this).attr('href');
+        if (current == link) {
+            $(this).addClass('current');
+            $(this).parent().parent().siblings('.hasChildren').addClass('current');
+        }
+    });
+});
+
+
+$(document).on("click", ".more-less-wrapper .btn-more-less", function () {
+    if ($(this).hasClass('active')) {
+        $(this).removeClass('active');
+        $(this).closest('.more-less-wrapper').removeClass('active');
+    } else {
+        $(this).addClass('active');
+        $(this).closest('.more-less-wrapper').addClass('active');
+    }
+});
+$(document).on("click", ".hasChildren", function () {
+    if ($(this).hasClass('active')) {
+        $(this).removeClass('active');
+    } else {
+        $(this).addClass('active');
+    }
+});
+
+
+
+
+$.fn.isInViewport = function () {
+    let elementTop = $(this).offset().top;
+    let elementBottom = elementTop + $(this).outerHeight();
+
+    let viewportTop = $(window).scrollTop();
+    let viewportBottom = viewportTop + $(window).height();
+
+    return elementBottom > viewportTop && elementTop < viewportBottom;
+};
+
+$(window).on('load scroll', function () {
+    $('section').each(function (i, el) {
+        if ($(this).isInViewport()) {
+            setTimeout(() => {
+                $(this).addClass('in-view');
+                $(this).prevAll().addClass('in-view');
+            }, 300);
+            // console.log('content block is in viewport.', $(this))
+        } else {
+            // $(this).removeClass('in-view');
+        }
+    })
+
+});

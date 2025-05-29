@@ -1,0 +1,100 @@
+$('.iframeBg').each(function () {
+    $(this).css('background-image', 'url(' + $(this).attr('data-bg') + ')');
+});
+
+
+$(document).ready(function () {
+    loadPlayer();
+});
+
+function loadPlayer() {
+    if (typeof (YT) == 'undefined' || typeof (YT.Player) == 'undefined') {
+        var tag = document.createElement('script');
+        tag.src = "//www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+}
+
+
+$(document).ready(function () {
+    var videoModal = new bootstrap.Modal(document.getElementById('videoModal'), {});
+    var $videoSrc;
+
+    $(document).on('click', '.playIframe, .stopYT', function (e) {
+        if ($('.playing').length) {
+            $('.iframeContainer').removeClass('playing');
+            $('.videoModal').removeClass('playing');
+            // player.pauseVideo();
+            $('.iframeWrapper').html('<div id="" class="player"></div>');
+        }
+
+
+        if ($(this).hasClass('btn-video')) {
+            e.preventDefault();
+            var url = $(this).attr('data-yt-id');
+            var thisIframe = $('.videoModal');
+            thisIframe.find('.iframeContainer').attr('data-yt-id', url);
+            thisIframe.find('.iframeWrapper').html('<div id="' + url + '" class="player"></div>');
+
+        } else {
+            $('.playIframe span .fa').removeClass('fa-cog fa-spin').addClass('fa-play');
+            var thisIframe = $(this).parent('.iframeContainer');
+            if (thisIframe.hasClass('playing')) {
+                player.pauseVideo();
+            } else {
+                url = thisIframe.attr('data-yt-id');
+                thisIframe.find('.iframeWrapper').html('<div id="' + url + '" class="player"></div>');
+                thisIframe.find('.playIframe span .fa').removeClass('fa-play').addClass(' fa-cog fa-spin');
+                // player.loadVideoById(url);
+            }
+        }
+
+        player = new YT.Player(url, {
+            height: '490',
+            width: '880',
+            videoId: url,
+            playerVars: {
+                controls: 1,
+                showinfo: 0,
+                rel: 0,
+                showsearch: 0,
+                iv_load_policy: 3,
+                autoplay: 1
+            },
+            events: {
+                'onReady': function () {
+                    thisIframe.addClass('playing');
+                },
+                //  'onStateChange': onPlayerStateChange,
+                'onStateChange': function (event) {
+                    if (event.data == YT.PlayerState.ENDED) {
+                        if ($('.videoModal').hasClass('show')) {
+                            videoModal.hide();
+                        }
+                        thisIframe.removeClass('playing');
+                        $('.playIframe span .fa').removeClass('fa-cog fa-spin').addClass('fa-play');
+                    } else if (event.data == YT.PlayerState.PLAYING) {
+                        thisIframe.addClass('playing');
+                    }
+                },
+                'onError': function () {
+
+                }
+            }
+        });
+
+
+    });
+
+
+    $('#videoModal').on('hide.bs.modal', function (e) {
+        if ($('.playing').length) {
+            // player.pauseVideo();
+            $('.iframeWrapper').html('<div id="" class="player"></div>');
+        }
+    })
+
+
+    // document ready  
+});

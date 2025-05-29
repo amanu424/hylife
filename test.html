@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizontal Application Cards</title>
+    <link rel="stylesheet" href="./output.css">
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <style>
+        .card-transition {
+            transition: all 0.3s ease-in-out;
+        }
+        .expand-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+        .expand-content.expanded {
+            max-height: 200px;
+            opacity: 1;
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        .tailwind-wrapper * {
+  all: revert; /* or 'unset' if you want to nuke everything */
+  font-family: inherit;
+}
+    </style>
+</head>
+<body class="bg-gray-50 ">
+
+<!-- Application Status Section -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Application Status</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Track the status of international job applications from candidates worldwide</p>
+        </div>
+
+        <!-- Accepted Applications (FIRST) -->
+        <div class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="p-3 bg-green-100 rounded-full">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-2xl font-bold text-gray-900">Accepted</h3>
+                    <p class="text-sm text-gray-600">3 Applications</p>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Accepted Card 1 -->
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200 cursor-pointer card-transition hover:shadow-lg" onclick="toggleCard('accepted-1')">
+                    <div class="flex items-center p-4">
+                        <img src="https://imgs.search.brave.com/ejkky_t20JI-E-SNQGardsGmS60Wd7mMabWyzYQ7OV8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTEz/OTg1OTI3OS9waG90/by9mYWNpYWwtcmVj/b2duaXRpb24tdGVj/aG5vbG9neS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9RGpL/cVgwdjRKS1NRbk5z/aWVfUGloVUl5WGJK/Wm9RcVhfRjV1NUoy/LUhRaz0?height=60&width=60" alt="Hiroshi Tanaka" class="w-12 h-12 rounded-full object-cover border-2 border-green-300">
+                        <div class="ml-4 flex-1">
+                            <h4 class="text-lg font-semibold text-gray-900">Hiroshi Tanaka</h4>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xl">🇯🇵</span>
+                                <span class="text-sm text-gray-600">Japan</span>
+                            </div>
+                        </div>
+                        <svg id="chevron-accepted-1" class="w-5 h-5 text-gray-400 card-transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    
+                    <div id="content-accepted-1" class="expand-content">
+                        <div class="border-t border-green-200 p-4 space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Age:</span>
+                                <span class="text-sm text-gray-900">34</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Gender:</span>
+                                <span class="text-sm text-gray-900">Male</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Phone:</span>
+                                <span class="text-sm text-gray-500 italic">Private</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accepted Card 2 -->
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200 cursor-pointer card-transition hover:shadow-lg" onclick="toggleCard('accepted-2')">
+                    <div class="flex items-center p-4">
+                        <img src="https://imgs.search.brave.com/ejkky_t20JI-E-SNQGardsGmS60Wd7mMabWyzYQ7OV8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTEz/OTg1OTI3OS9waG90/by9mYWNpYWwtcmVj/b2duaXRpb24tdGVj/aG5vbG9neS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9RGpL/cVgwdjRKS1NRbk5z/aWVfUGloVUl5WGJK/Wm9RcVhfRjV1NUoy/LUhRaz0?height=60&width=60" alt="Sophie Dubois" class="w-12 h-12 rounded-full object-cover border-2 border-green-300">
+                        <div class="ml-4 flex-1">
+                            <h4 class="text-lg font-semibold text-gray-900">Sophie Dubois</h4>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xl">🇫🇷</span>
+                                <span class="text-sm text-gray-600">France</span>
+                            </div>
+                        </div>
+                        <svg id="chevron-accepted-2" class="w-5 h-5 text-gray-400 card-transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    
+                    <div id="content-accepted-2" class="expand-content">
+                        <div class="border-t border-green-200 p-4 space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Age:</span>
+                                <span class="text-sm text-gray-900">26</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Gender:</span>
+                                <span class="text-sm text-gray-900">Female</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Phone:</span>
+                                <span class="text-sm text-gray-500 italic">Private</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accepted Card 3 -->
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200 cursor-pointer card-transition hover:shadow-lg" onclick="toggleCard('accepted-3')">
+                    <div class="flex items-center p-4">
+                        <img src="https://imgs.search.brave.com/ejkky_t20JI-E-SNQGardsGmS60Wd7mMabWyzYQ7OV8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTEz/OTg1OTI3OS9waG90/by9mYWNpYWwtcmVj/b2duaXRpb24tdGVj/aG5vbG9neS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9RGpL/cVgwdjRKS1NRbk5z/aWVfUGloVUl5WGJK/Wm9RcVhfRjV1NUoy/LUhRaz0?height=60&width=60" alt="Priya Sharma" class="w-12 h-12 rounded-full object-cover border-2 border-green-300">
+                        <div class="ml-4 flex-1">
+                            <h4 class="text-lg font-semibold text-gray-900">Priya Sharma</h4>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xl">🇮🇳</span>
+                                <span class="text-sm text-gray-600">India</span>
+                            </div>
+                        </div>
+                        <svg id="chevron-accepted-3" class="w-5 h-5 text-gray-400 card-transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    
+                    <div id="content-accepted-3" class="expand-content">
+                        <div class="border-t border-green-200 p-4 space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Age:</span>
+                                <span class="text-sm text-gray-900">30</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Gender:</span>
+                                <span class="text-sm text-gray-900">Female</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Phone:</span>
+                                <span class="text-sm text-gray-500 italic">Private</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Applications -->
+        <div class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="p-3 bg-yellow-100 rounded-full">
+                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-2xl font-bold text-gray-900">Pending Review</h3>
+                    <p class="text-sm text-gray-600">3 Applications</p>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Pending Card 1 -->
+                <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200 cursor-pointer card-transition hover:shadow-lg" onclick="toggleCard('pending-1')">
+                    <div class="flex items-center p-4">
+                        <img src="https://imgs.search.brave.com/ejkky_t20JI-E-SNQGardsGmS60Wd7mMabWyzYQ7OV8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTEz/OTg1OTI3OS9waG90/by9mYWNpYWwtcmVj/b2duaXRpb24tdGVj/aG5vbG9neS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9RGpL/cVgwdjRKS1NRbk5z/aWVfUGloVUl5WGJK/Wm9RcVhfRjV1NUoy/LUhRaz0?height=60&width=60" alt="Maria Rodriguez" class="w-12 h-12 rounded-full object-cover border-2 border-yellow-300">
+                        <div class="ml-4 flex-1">
+                            <h4 class="text-lg font-semibold text-gray-900">Maria Rodriguez</h4>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xl">🇪🇸</span>
+                                <span class="text-sm text-gray-600">Spain</span>
+                            </div>
+                        </div>
+                        <svg id="chevron-pending-1" class="w-5 h-5 text-gray-400 card-transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    
+                    <div id="content-pending-1" class="expand-content">
+                        <div class="border-t border-yellow-200 p-4 space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Age:</span>
+                                <span class="text-sm text-gray-900">28</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Gender:</span>
+                                <span class="text-sm text-gray-900">Female</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Phone:</span>
+                                <span class="text-sm text-gray-500 italic">Private</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Card 2 -->
+                <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200 cursor-pointer card-transition hover:shadow-lg" onclick="toggleCard('pending-2')">
+                    <div class="flex items-center p-4">
+                        <img src="https://imgs.search.brave.com/ejkky_t20JI-E-SNQGardsGmS60Wd7mMabWyzYQ7OV8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTEz/OTg1OTI3OS9waG90/by9mYWNpYWwtcmVj/b2duaXRpb24tdGVj/aG5vbG9neS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9RGpL/cVgwdjRKS1NRbk5z/aWVfUGloVUl5WGJK/Wm9RcVhfRjV1NUoy/LUhRaz0?height=60&width=60" alt="Emma Thompson" class="w-12 h-12 rounded-full object-cover border-2 border-yellow-300">
+                        <div class="ml-4 flex-1">
+                            <h4 class="text-lg font-semibold text-gray-900">Emma Thompson</h4>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xl">🇬🇧</span>
+                                <span class="text-sm text-gray-600">United Kingdom</span>
+                            </div>
+                        </div>
+                        <svg id="chevron-pending-2" class="w-5 h-5 text-gray-400 card-transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    
+                    <div id="content-pending-2" class="expand-content">
+                        <div class="border-t border-yellow-200 p-4 space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Age:</span>
+                                <span class="text-sm text-gray-900">31</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Gender:</span>
+                                <span class="text-sm text-gray-900">Female</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Phone:</span>
+                                <span class="text-sm text-gray-500 italic">Private</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Card 3 -->
+                <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200 cursor-pointer card-transition hover:shadow-lg" onclick="toggleCard('pending-3')">
+                    <div class="flex items-center p-4">
+                        <img src="https://imgs.search.brave.com/ejkky_t20JI-E-SNQGardsGmS60Wd7mMabWyzYQ7OV8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTEz/OTg1OTI3OS9waG90/by9mYWNpYWwtcmVj/b2duaXRpb24tdGVj/aG5vbG9neS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9RGpL/cVgwdjRKS1NRbk5z/aWVfUGloVUl5WGJK/Wm9RcVhfRjV1NUoy/LUhRaz0?height=60&width=60" alt="Carlos Silva" class="w-12 h-12 rounded-full object-cover border-2 border-yellow-300">
+                        <div class="ml-4 flex-1">
+                            <h4 class="text-lg font-semibold text-gray-900">Carlos Silva</h4>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xl">🇧🇷</span>
+                                <span class="text-sm text-gray-600">Brazil</span>
+                            </div>
+                        </div>
+                        <svg id="chevron-pending-3" class="w-5 h-5 text-gray-400 card-transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    
+                    <div id="content-pending-3" class="expand-content">
+                        <div class="border-t border-yellow-200 p-4 space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Age:</span>
+                                <span class="text-sm text-gray-900">29</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Gender:</span>
+                                <span class="text-sm text-gray-900">Male</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Phone:</span>
+                                <span class="text-sm text-gray-500 italic">Private</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rejected Applications -->
+        <div class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="p-3 bg-red-100 rounded-full">
+                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-2xl font-bold text-gray-900">Rejected</h3>
+                    <p class="text-sm text-gray-600">2 Applications</p>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Rejected Card 1 -->
+                <div class="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl border border-red-200 cursor-pointer card-transition hover:shadow-lg" onclick="toggleCard('rejected-1')">
+                    <div class="flex items-center p-4">
+                        <img src="https://imgs.search.brave.com/ejkky_t20JI-E-SNQGardsGmS60Wd7mMabWyzYQ7OV8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTEz/OTg1OTI3OS9waG90/by9mYWNpYWwtcmVj/b2duaXRpb24tdGVj/aG5vbG9neS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9RGpL/cVgwdjRKS1NRbk5z/aWVfUGloVUl5WGJK/Wm9RcVhfRjV1NUoy/LUhRaz0?height=60&width=60" alt="Ahmed Hassan" class="w-12 h-12 rounded-full object-cover border-2 border-red-300">
+                        <div class="ml-4 flex-1">
+                            <h4 class="text-lg font-semibold text-gray-900">Ahmed Hassan</h4>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xl">🇪🇬</span>
+                                <span class="text-sm text-gray-600">Egypt</span>
+                            </div>
+                        </div>
+                        <svg id="chevron-rejected-1" class="w-5 h-5 text-gray-400 card-transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    
+                    <div id="content-rejected-1" class="expand-content">
+                        <div class="border-t border-red-200 p-4 space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Age:</span>
+                                <span class="text-sm text-gray-900">35</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Gender:</span>
+                                <span class="text-sm text-gray-900">Male</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Phone:</span>
+                                <span class="text-sm text-gray-500 italic">Private</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rejected Card 2 -->
+                <div class="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl border border-red-200 cursor-pointer card-transition hover:shadow-lg" onclick="toggleCard('rejected-2')">
+                    <div class="flex items-center p-4">
+                        <img src="https://imgs.search.brave.com/ejkky_t20JI-E-SNQGardsGmS60Wd7mMabWyzYQ7OV8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTEz/OTg1OTI3OS9waG90/by9mYWNpYWwtcmVj/b2duaXRpb24tdGVj/aG5vbG9neS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9RGpL/cVgwdjRKS1NRbk5z/aWVfUGloVUl5WGJK/Wm9RcVhfRjV1NUoy/LUhRaz0?height=60&width=60" alt="Lars Andersen" class="w-12 h-12 rounded-full object-cover border-2 border-red-300">
+                        <div class="ml-4 flex-1">
+                            <h4 class="text-lg font-semibold text-gray-900">Lars Andersen</h4>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xl">🇩🇰</span>
+                                <span class="text-sm text-gray-600">Denmark</span>
+                            </div>
+                        </div>
+                        <svg id="chevron-rejected-2" class="w-5 h-5 text-gray-400 card-transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                    
+                    <div id="content-rejected-2" class="expand-content">
+                        <div class="border-t border-red-200 p-4 space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Age:</span>
+                                <span class="text-sm text-gray-900">42</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Gender:</span>
+                                <span class="text-sm text-gray-900">Male</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm font-medium text-gray-600">Phone:</span>
+                                <span class="text-sm text-gray-500 italic">Private</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function toggleCard(cardId) {
+        const content = document.getElementById(`content-${cardId}`);
+        const chevron = document.getElementById(`chevron-${cardId}`);
+        
+        if (content.classList.contains('expanded')) {
+            // Collapse
+            content.classList.remove('expanded');
+            chevron.classList.remove('rotate-180');
+        } else {
+            // Expand
+            content.classList.add('expanded');
+            chevron.classList.add('rotate-180');
+        }
+    }
+</script>
+
+</body>
+</html>

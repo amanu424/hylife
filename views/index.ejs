@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .floating-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .floating-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .applicant-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .applicant-details {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #dee2e6;
+        }
+        .applicant-details.show {
+            display: block;
+        }
+        .applicant-card.active {
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .imagesInput {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .cardImg {
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>User Management System</h2>
+            <% if (locals.isAuthenticated) { %>
+                <a href="/logout" class="btn btn-danger">Logout</a>
+            <% } else { %>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+            <% } %>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <!-- User Lists -->
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Accepted Users</h3>
+                <div id="acceptedUsersList" class="row"></div>
+            </div>
+            <div class="col-md-4">
+                <h3>Pending Users</h3>
+                <div id="pendingUsersList" class="row"></div>
+            </div>
+            <div class="col-md-4">
+                <h3>Rejected Users</h3>
+                <div id="rejectedUsersList" class="row"></div>
+            </div>
+        </div>
+    </div>
+
+    <% if(isAuthenticated) { %>
+        <!-- Floating Action Buttons -->
+        <div class="floating-buttons">
+            <button class="floating-button btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                <i class="fas fa-plus"></i>
+            </button>
+            <button class="floating-button btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editUserModal">
+                <i class="fas fa-edit"></i>
+            </button>
+        </div>
+    <% } %>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm" ction="/users" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="age" class="form-label">Age</label>
+                            <input type="number" class="form-control" id="age" name="age" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Image</label>
+                            <div class="imagesInput">
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                                <img id="userImageOnForm" src="/img/default-avatar.png" alt="Photo" class="me-3 cardImg" width="65" height="65">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" class="form-select" id="status" required>
+                                <option value="accepted">Accepted</option>
+                                <option value="pending">Pending</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="addUserBtn">Add User</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="editUserSelect" class="form-label">Select User</label>
+                            <select class="form-select" id="editUserSelect" required>
+                                <!-- Options will be populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="editName" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAge" class="form-label">Age</label>
+                            <input type="number" class="form-control" id="editAge" name="age" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhoneNumber" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="editPhoneNumber" name="phoneNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editImage" class="form-label">Image</label>
+                            <div class="imagesInput">
+                                <input type="file" class="form-control" id="editImage" name="image" accept="image/*">
+                                <img id="updateImage" src="/img/default-avatar.png" alt="Photo" class="me-3 cardImg" width="65" height="65">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStatus" class="form-label">Status</label>
+                            <select name="status" class="form-select" id="editStatus" required>
+                                <option value="accepted">Accepted</option>
+                                <option value="pending">Pending</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <button type="submit" class="btn btn-primary" id="editUserBtn">Update User</button>
+                            <button type="button" id="deleteUserBtn" class="btn btn-danger" disabled>Delete User</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+            // Image preview functionality
+            const body = { name: "Beyene" }
+            const res = await fetch("http://localhost:3000/beyene", {
+                method: "POST",
+                
+                body: body
+            })
+            console.log("sending aaa request...");
+            const aaa = await res.json()
+            console.log("aaaaa", aaa);
+            const imageInput = document.getElementById("image");
+            const imagePreview = document.getElementById("userImageOnForm");
+            const editImageInput = document.getElementById("editImage");
+            const editImagePreview = document.getElementById("updateImage");
+
+            imageInput.addEventListener("change", function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            editImageInput.addEventListener("change", function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        editImagePreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Get users data
+            let users = await JSON.parse(`<%-JSON.stringify(users)%>`);
+
+            // Render users
+            function renderUsers() {
+                const acceptedList = document.getElementById("acceptedUsersList");
+                const pendingList = document.getElementById("pendingUsersList");
+                const rejectedList = document.getElementById("rejectedUsersList");
+
+                acceptedList.innerHTML = '';
+                pendingList.innerHTML = '';
+                rejectedList.innerHTML = '';
+
+                users.forEach((user, index) => {
+                    const userCard = `
+                        <div class="col-12 mb-3">
+                            <div class="card user-card" onclick="toggleUserDetails(${index})">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center">
+                                            <img src="${user.image}" alt="${user.name}" class="rounded-circle me-3 cardImg" width="65" height="65">
+                                            <div>
+                                                <h5 class="card-title mb-0">${user.name}</h5>
+                                                <p class="card-text text-${user.status === 'accepted' ? 'success' : user.status === 'pending' ? 'warning' : 'danger'} mb-0">
+                                                    ${user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <i class="fas fa-chevron-down" id="chevron${index}"></i>
+                                    </div>
+                                    <div id="userDetails${index}" class="user-details">
+                                        <p><strong>Age:</strong> ${user.age}</p>
+                                        <p><strong>Phone:</strong> ${user.phoneNumber}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    if (user.status === 'accepted') {
+                        acceptedList.innerHTML += userCard;
+                    } else if (user.status === 'pending') {
+                        pendingList.innerHTML += userCard;
+                    } else {
+                        rejectedList.innerHTML += userCard;
+                    }
+                });
+
+                populateEditUserSelect();
+            }
+
+            // Toggle user details
+            window.toggleUserDetails = function(index) {
+                const details = document.getElementById(`userDetails${index}`);
+                const chevron = document.getElementById(`chevron${index}`);
+                details.classList.toggle('show');
+                chevron.classList.toggle('fa-chevron-up');
+                chevron.classList.toggle('fa-chevron-down');
+            };
+
+            // Add user form submission
+            const addUserForm = document.getElementById("addUserForm");
+            addUserForm.addEventListener("submit", async function(e) {
+                e.preventDefault();
+                const submitBtn = document.getElementById("addUserBtn");
+                submitBtn.innerText = "Adding User...";
+                submitBtn.disabled = true;
+
+                try {
+                    const formData = new FormData(addUserForm);
+                    // const formData = new FormData();
+formData.append('name', 'John Doe');
+formData.append('age', '30');
+formData.append('phoneNumber', '123456789');
+formData.append('status', 'pending');
+console.log(formData);
+                    const response = await fetch("/users", {
+                        method: "POST",
+                        body: formData
+                    });
+                    const data = await response.json();
+
+                    if (data.success) {
+                        users.push(data.user);
+                        renderUsers();
+                        bootstrap.Modal.getInstance(document.getElementById("addUserModal")).hide();
+                        this.reset();
+                        imagePreview.src = "/img/default-avatar.png";
+                    } else {
+                        throw new Error(data.message);
+                    }
+                } catch (error) {
+                    alert("Error adding user: " + error.message);
+                } finally {
+                    submitBtn.innerText = "Add User";
+                    submitBtn.disabled = false;
+                }
+            });
+
+            // Populate edit user select
+            function populateEditUserSelect() {
+                const select = document.getElementById("editUserSelect");
+                select.innerHTML = '<option value="">Select a user</option>';
+                users.forEach(user => {
+                    select.innerHTML += `<option value="${user._id}">${user.name}</option>`;
+                });
+            }
+
+            // Edit user form handling
+            const editUserSelect = document.getElementById("editUserSelect");
+            const editUserForm = document.getElementById("editUserForm");
+            const deleteUserBtn = document.getElementById("deleteUserBtn");
+            const editUserBtn = document.getElementById("editUserBtn");
+
+            editUserSelect.addEventListener("change", function() {
+                const selectedUser = users.find(u => u._id === this.value);
+                if (selectedUser) {
+                    document.getElementById("editName").value = selectedUser.name;
+                    document.getElementById("editAge").value = selectedUser.age;
+                    document.getElementById("editPhoneNumber").value = selectedUser.phoneNumber;
+                    document.getElementById("editStatus").value = selectedUser.status;
+                    editImagePreview.src = selectedUser.image;
+                    deleteUserBtn.disabled = false;
+                } else {
+                    deleteUserBtn.disabled = true;
+                }
+            });
+
+            editUserForm.addEventListener("submit", async function(e) {
+                e.preventDefault();
+                const selectedId = editUserSelect.value;
+                editUserBtn.innerText = "Updating...";
+                editUserBtn.disabled = true;
+                deleteUserBtn.disabled = true;
+
+                try {
+                    const formData = new FormData(this);
+                    const response = await fetch(`/users/${selectedId}`, {
+                        method: "PUT",
+                        body: formData
+                    });
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const userIndex = users.findIndex(u => u._id === selectedId);
+                        if (userIndex !== -1) {
+                            users[userIndex] = data.user;
+                            renderUsers();
+                            bootstrap.Modal.getInstance(document.getElementById("editUserModal")).hide();
+                            this.reset();
+                            editImagePreview.src = "/img/default-avatar.png";
+                        }
+                    } else {
+                        throw new Error(data.message);
+                    }
+                } catch (error) {
+                    alert("Error updating user: " + error.message);
+                } finally {
+                    editUserBtn.innerText = "Update User";
+                    editUserBtn.disabled = false;
+                    deleteUserBtn.disabled = false;
+                }
+            });
+
+            // Delete user
+            deleteUserBtn.addEventListener("click", async function() {
+                const selectedId = editUserSelect.value;
+                if (confirm("Are you sure you want to delete this user?")) {
+                    deleteUserBtn.innerText = "Deleting...";
+                    deleteUserBtn.disabled = true;
+                    editUserBtn.disabled = true;
+
+                    try {
+                        const response = await fetch(`/users/${selectedId}`, {
+                            method: "DELETE"
+                        });
+
+                        if (response.ok) {
+                            users = users.filter(u => u._id !== selectedId);
+                            renderUsers();
+                            bootstrap.Modal.getInstance(document.getElementById("editUserModal")).hide();
+                            editUserForm.reset();
+                            editImagePreview.src = "/img/default-avatar.png";
+                        } else {
+                            throw new Error("Failed to delete user");
+                        }
+                    } catch (error) {
+                        alert("Error deleting user: " + error.message);
+                    } finally {
+                        deleteUserBtn.innerText = "Delete User";
+                        deleteUserBtn.disabled = false;
+                        editUserBtn.disabled = false;
+                    }
+                }
+            });
+
+            // Login form handling
+            const loginForm = document.getElementById("loginForm");
+            loginForm.addEventListener("submit", async function(e) {
+                e.preventDefault();
+                try {
+                    const formData = new FormData(this);
+                    const response = await fetch("/login", {
+                        method: "POST",
+                        body: formData
+                    });
+                    const data = await response.json();
+
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        throw new Error(data.message);
+                    }
+                } catch (error) {
+                    alert("Login failed: " + error.message);
+                }
+            });
+
+            // Initial render
+            renderUsers();
+        });
+    </script>
+</body>
+</html> 

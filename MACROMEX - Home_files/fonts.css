@@ -1,0 +1,57 @@
+/* @font-face {
+    font-family: "Collator";
+    src: url("../font/Collator/Collator.eot");
+    src: url("../font/Collator/Collator.eot?#iefix") format("embedded-opentype"),
+        url("../font/Collator/Collator.woff2") format("woff2"), url("../font/Collator/Collator.woff") format("woff"),
+        url("../font/Collator/Collator.ttf") format("truetype"),
+        url("../font/Collator/Collator.svg#Collator") format("svg");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+} */
+
+@font-face {
+    font-family: "Collator";
+    src: url("../font/Collator-RO/Collator-RO.woff2") format("woff2"),
+        url("../font/Collator-RO/Collator-RO.woff") format("woff"),
+        url("../font/Collator-RO/Collator-RO.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("../font/Inter/Inter-Regular.eot");
+    src: url("../font/Inter/Inter-Regular.eot?#iefix") format("embedded-opentype"),
+        url("../font/Inter/Inter-Regular.woff2") format("woff2"), url("../font/Inter/Inter-Regular.woff") format("woff"),
+        url("../font/Inter/Inter-Regular.ttf") format("truetype"),
+        url("../font/Inter/Inter-Regular.svg#Inter-Regular") format("svg");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("../font/Inter/Inter-Bold.eot");
+    src: url("../font/Inter/Inter-Bold.eot?#iefix") format("embedded-opentype"),
+        url("../font/Inter/Inter-Bold.woff2") format("woff2"), url("../font/Inter/Inter-Bold.woff") format("woff"),
+        url("../font/Inter/Inter-Bold.ttf") format("truetype"),
+        url("../font/Inter/Inter-Bold.svg#Inter-Bold") format("svg");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("../font/Inter/Inter-Medium.eot");
+    src: url("../font/Inter/Inter-Medium.eot?#iefix") format("embedded-opentype"),
+        url("../font/Inter/Inter-Medium.woff2") format("woff2"), url("../font/Inter/Inter-Medium.woff") format("woff"),
+        url("../font/Inter/Inter-Medium.ttf") format("truetype"),
+        url("../font/Inter/Inter-Medium.svg#Inter-Medium") format("svg");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
