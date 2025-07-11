@@ -9,8 +9,14 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const bcrypt = require('bcryptjs');
 const bodyParser = require("body-parser")
+const path = require('path');
 const app = express();
+
 const cors = require('cors');
+const User = require('./models/User');
+const Admin = require('./models/Admin');
+
+
 app.use(cors());
 // Body Parser Middleware
 app.use(express.json());
@@ -41,30 +47,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 })
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
-
-// Admin Schema
-const adminSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
-});
-
-const Admin = mongoose.model('Admin', adminSchema);
-
-// User Schema
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  image: { type: String, required: true },
-  age: { type: Number, required: true },
-  phoneNumber: { type: String, required: true },
-  status: { 
-    type: String, 
-    required: true,
-    enum: ['accepted', 'pending', 'rejected'],
-    default: 'pending'
-  }
-});
-
-const User = mongoose.model('User', userSchema);
 
 // Middleware
 app.set('view engine', 'ejs');
