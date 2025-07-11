@@ -10,7 +10,8 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const bcrypt = require('bcryptjs');
 const bodyParser = require("body-parser")
 const app = express();
-
+const cors = require('cors');
+app.use(cors());
 // Body Parser Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,7 +27,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'user-images',
+    folder: 'macromex',
     allowed_formats: ['jpg', 'jpeg', 'png']
   }
 });
@@ -109,10 +110,11 @@ const isLocalhost = (req, res, next) => {
 };
 
 // Routes
-app.get('/', async (req, res) => {
+app.get('/results', async (req, res) => {
   try {
     const users = await User.find();
-    res.render('index', { 
+    console.log(req.session.isAuthenticated, "is auth");
+    res.render('results', { 
       users, 
       error: req.flash('error'), 
       success: req.flash('success'),
@@ -124,25 +126,40 @@ app.get('/', async (req, res) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.render('hylife', { error: req.flash('error') });
+});
+
 app.get('/login', (req, res) => {
   res.render('login', { error: req.flash('error') });
 });
 
 app.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    console.log(req.body);
-    const admin = await Admin.findOne({ email });
-    
-    if (admin && await bcrypt.compare(password, admin.password)) {
+    const { username, password } = req.body;
+    const allUsers = await Admin.find(); 
+    const admin = await Admin.findOne({ email: username });
+    console.log(allUsers, "all users");
+    // if (admin && await bcrypt.compare(password, admin.password)) {
+    //   req.session.isAuthenticated = true;
+    //   res.redirect('/');
+    // } else {
+    //   req.flash('error', 'Invalid credentials');
+    //   res.redirect('/login');
+    // }
+    if (admin) {
       req.session.isAuthenticated = true;
-      res.redirect('/');
+      // res.redirect('/');
+      res.status(200).json({ success: true, message: 'Login successful' });
+      // res.redirect('/');
     } else {
       req.flash('error', 'Invalid credentials');
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
       res.redirect('/login');
     }
   } catch (error) {
     req.flash('error', 'Error during login');
+    return res.status(500).json({ success: false, message: 'Error during login' });
     res.redirect('/login');
   }
 });
@@ -152,7 +169,7 @@ app.get('/register-admin', isLocalhost, (req, res) => {
   res.render('register-admin', { error: req.flash('error'), success: req.flash('success') });
 });
 
-app.post('/register-admin', isLocalhost, async (req, res) => {
+app.post('/register-admin', async (req, res) => {
   try {
     const { email, password } = req.body;
     
@@ -183,17 +200,14 @@ app.post('/register-admin', isLocalhost, async (req, res) => {
 
 app.get('/logout', (req, res) => {
   req.session.destroy();
-  res.redirect('/');
+  res.redirect('/results');
 });
 
-app.post('/users', isAuthenticated, upload.single('image'), async (req, res) => {
+app.post('/users', upload.single('image'), async (req, res) => {
   try {
-    
-    console.log('Request body:', req.body);
-    console.log('Request file:', req.file);
-    
+  
     const { name, age, phoneNumber, status } = req.body;
-    
+
     if (!name || !age || !phoneNumber) {
       return res.status(400).json({ 
         success: false, 
@@ -208,9 +222,17 @@ app.post('/users', isAuthenticated, upload.single('image'), async (req, res) => 
       });
     }
 
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'macromex',
+      transformation: [
+        { width: 100, crop: "limit" },
+        { quality: "auto" }
+      ]
+    });
+
     const user = new User({
       name,
-      image: req.file.path,
+      image: result.secure_url,
       age,
       phoneNumber,
       status: status || 'pending'
@@ -251,6 +273,10 @@ app.delete('/users/:id', isAuthenticated, async (req, res) => {
 app.post("/beyene", async(req, res) => {
     console.log(req.body);
     res.json({ data: `bey ${req.body.beyene} Tebeynual`})
+})
+
+app.get("/*", (req, res) => {
+  res.redirect("/")
 })
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

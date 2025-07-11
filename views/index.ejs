@@ -325,11 +325,6 @@
                 try {
                     const formData = new FormData(addUserForm);
                     // const formData = new FormData();
-formData.append('name', 'John Doe');
-formData.append('age', '30');
-formData.append('phoneNumber', '123456789');
-formData.append('status', 'pending');
-console.log(formData);
                     const response = await fetch("/users", {
                         method: "POST",
                         body: formData
