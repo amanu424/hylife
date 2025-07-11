@@ -52,7 +52,8 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, "public")));
+
 
 // Session configuration with MongoDB store
 app.use(session({
