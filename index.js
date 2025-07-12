@@ -67,7 +67,7 @@ app.use(session({
     touchAfter: 24 * 3600 // time period in seconds
   }),
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+    secure: true, // Use secure cookies in production
     maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
   }
 }));
